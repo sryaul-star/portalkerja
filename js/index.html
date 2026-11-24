@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Memuat Portal...</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --card: #ffffff;
+      --text: #1b2430;
+      --muted: #677286;
+      --border: #dce1e8;
+      --accent: #0b6e5f;
+      --accent-soft: #e2f2ee;
+      --danger: #b42318;
+      --danger-bg: #fef3f2;
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 14px/1.5 system-ui, "Segoe UI", Arial, sans-serif;
+    }
+
+    /* Tampilan Memuat & Login */
+    .center-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .login-box {
+      width: 100%;
+      max-width: 380px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 24px;
+    }
+    .login-box h1 { margin: 0 0 6px; font-size: 20px; color: var(--accent); }
+    .login-box p { margin: 0 0 18px; color: var(--muted); font-size: 13px; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; }
+    .field input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      font: inherit;
+    }
+    .btn {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #fff;
+      border-radius: 8px;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .error-box {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: var(--danger-bg);
+      color: var(--danger);
+      font-size: 13px;
+    }
+
+    /* Kerangka Utama Portal */
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 240px;
+      background: var(--card);
+      border-right: 1px solid var(--border);
+      padding: 18px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .brand {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--accent);
+      padding: 4px 10px 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 12px;
+    }
+    .menu { display: flex; flex-direction: column; gap: 6px; }
+    .menu button {
+      text-align: left;
+      padding: 10px 12px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      cursor: pointer;
+    }
+    .menu button:hover { background: var(--bg); }
+    .menu button.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .logout-btn {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--danger);
+      border-radius: 8px;
+      font: inherit;
+      cursor: pointer;
+    }
+    .logout-btn:hover { background: var(--danger-bg); border-color: var(--danger); }
+
+    .main { flex: 1; display: flex; flex-direction: column; }
+    .topbar {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .topbar h2 { margin: 0; font-size: 17px; }
+    .user-badge {
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 5px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .content { padding: 22px; max-width: 960px; width: 100%; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+    .card h3 { margin: 0 0 8px; font-size: 15px; }
+    .muted { color: var(--muted); margin: 4px 0; }
+
+    @media (max-width: 760px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; border-right: 0; border-bottom: 1px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. Layar Tunggu Saat Memeriksa Sesi Login -->
+  <div id="loadingView" class="center-screen">
+    <p class="muted">Memeriksa sesi login...</p>
+  </div>
+
+  <!-- 2. Halaman Login (Tertutup untuk Umum) -->
+  <div id="loginView" class="center-screen" hidden>
+    <div class="login-box">
+      <h1 id="loginTitle">Portal Kerja</h1>
+      <p>Silakan masuk menggunakan akun yang telah didaftarkan.</p>
+      <form id="loginForm">
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" type="email" required placeholder="nama@email.com">
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" type="password" required placeholder="Masukkan password">
+        </div>
+        <button id="loginBtn" class="btn" type="submit">Masuk</button>
+        <div id="loginError" class="error-box" hidden></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. Kerangka Utama Portal (Muncul Setelah Login) -->
+  <div id="appView" class="layout" hidden>
+    <aside class="sidebar">
+      <div>
+        <div id="sidebarTitle" class="brand">Portal Kerja</div>
+        <nav class="menu">
+          <button class="active" data-page="dashboard">Dashboard Utama</button>
+          <button data-page="invoice">Pantauan Invoice 2027</button>
+          <button id="menuUsers" data-page="users" hidden>Kelola Akses Tim</button>
+        </nav>
+      </div>
+      <button id="logoutBtn" class="logout-btn">Keluar</button>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <h2 id="pageTitle">Dashboard Utama</h2>
+        <span id="userBadge" class="user-badge"></span>
+      </header>
+      <main id="pageContent" class="content"></main>
+    </div>
+  </div>
+
+  <script type="module">
+    import { APP_NAME, auth, db } from "./js/firebase-config.js";
+    import {
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    import {
+      doc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+    // Pasang nama portal di tab browser, halaman login, dan sidebar
+    document.title = APP_NAME;
+    document.getElementById("loginTitle").textContent = APP_NAME;
+    document.getElementById("sidebarTitle").textContent = APP_NAME;
+
+    const loadingView = document.getElementById("loadingView");
+    const loginView = document.getElementById("loginView");
+    const appView = document.getElementById("appView");
+    const loginForm = document.getElementById("loginForm");
+    const loginBtn = document.getElementById("loginBtn");
+    const loginError = document.getElementById("loginError");
+    const menuUsers = document.getElementById("menuUsers");
+    const userBadge = document.getElementById("userBadge");
+    const pageTitle = document.getElementById("pageTitle");
+    const pageContent = document.getElementById("pageContent");
+
+    let currentUserProfile = null;
+
+    function showError(message) {
+      loginError.textContent = message;
+      loginError.hidden = false;
+    }
+
+    // Proses saat tombol "Masuk" diklik
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      loginError.hidden = true;
+      loginBtn.disabled = true;
+      loginBtn.textContent = "Memeriksa...";
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (err) {
+        if (err.code === "auth/invalid-credential" || err.code === "auth/wrong-password" || err.code === "auth/user-not-found") {
+          showError("Email atau password salah. Silakan periksa kembali.");
+        } else {
+          showError("Gagal masuk: " + err.message);
+        }
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Masuk";
+      }
+    });
+
+    // Proses saat tombol "Keluar" diklik
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      signOut(auth);
+    });
+
+    // Pemantau otomatis status login pengguna
+    onAuthStateChanged(auth, async (user) => {
+      loadingView.hidden = true;
+      loginBtn.disabled = false;
+      loginBtn.textContent = "Masuk";
+
+      if (!user) {
+        currentUserProfile = null;
+        appView.hidden = true;
+        loginView.hidden = false;
+        return;
+      }
+
+      // Ambil nama dan peran (role) pengguna dari koleksi "users" di Firestore
+      try {
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if (!snap.exists()) {
+          showError("Akun Anda belum didaftarkan perannya di database (koleksi users).");
+          await signOut(auth);
+          return;
+        }
+
+        currentUserProfile = { uid: user.uid, ...snap.data() };
+        const roleLabel = (currentUserProfile.role || "viewer").toUpperCase();
+
+        userBadge.textContent = `${currentUserProfile.nama} • ${roleLabel}`;
+        menuUsers.hidden = currentUserProfile.role !== "admin";
+
+        loginView.hidden = true;
+        appView.hidden = false;
+        openPage("dashboard");
+      } catch (err) {
+        showError("Gagal membaca data peran dari database: " + err.message);
+        await signOut(auth);
+      }
+    });
+
+    // Navigasi antar menu modul
+    document.querySelectorAll(".menu button").forEach((btn) => {
+      btn.addEventListener("click", () => openPage(btn.dataset.page));
+    });
+
+    function openPage(page) {
+      document.querySelectorAll(".menu button").forEach((b) => {
+        b.classList.toggle("active", b.dataset.page === page);
+      });
+
+      if (page === "dashboard") {
+        pageTitle.textContent = "Dashboard Utama";
+        pageContent.innerHTML = `
+          <div class="card">
+            <h3>Selamat datang, ${currentUserProfile.nama}!</h3>
+            <p class="muted">Koneksi ke sistem Login dan Database Firestore sudah aktif.</p>
+            <p class="muted">Peran akun Anda saat ini: <b>${currentUserProfile.role}</b>.</p>
+          </div>
+          <div class="card">
+            <h3>Status Pengembangan Portal</h3>
+            <p class="muted">• Tahap 2 (Login & Kerangka Portal): <b>Selesai</b></p>
+            <p class="muted">• Tahap 3 (Integrasi Modul Pantauan Invoice 2027): Menunggu konfirmasi Anda</p>
+            <p class="muted">• Tahap 4 (Menu Kelola Akses 10+ Rekan Kerja): Berikutnya</p>
+          </div>
+        `;
+      } else if (page === "invoice") {
+        pageTitle.textContent = "Pantauan Invoice 2027";
+        pageContent.innerHTML = `
+          <div class="card">
+            <h3>Modul 1 Siap Dipasang</h3>
+            <p class="muted">Di Tahap 3 nanti, seluruh fitur impor Excel, pencarian SPK/Kontrak, isian 6 dokumen invoice, dan cetak Checksheet/Checklist akan tampil di halaman ini.</p>
+          </div>
+        `;
+      } else if (page === "users") {
+        pageTitle.textContent = "Kelola Akses Tim";
+        pageContent.innerHTML = `
+          <div class="card">
+            <h3>Khusus Admin</h3>
+            <p class="muted">Menu ini hanya tampil karena peran Anda adalah <b>admin</b>. Di Tahap 4, halaman ini akan dipakai untuk mengatur peran Editor dan Viewer untuk 10+ rekan kerja.</p>
+          </div>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
