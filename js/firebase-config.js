@@ -2,17 +2,17 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/fireba
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-// 1. Ganti dengan nama portal yang Anda inginkan
+// 1. Ganti teks di dalam tanda kutip dengan judul website pilihan Anda
 export const APP_NAME = "NAMA PORTAL PILIHAN ANDA";
 
-// 2. Ganti blok di bawah ini dengan firebaseConfig asli dari Notepad Anda
+// 2. Konfigurasi asli proyek Firebase Anda
 const firebaseConfig = {
-  apiKey: "TEMPEL_API_KEY_ANDA",
-  authDomain: "TEMPEL_AUTH_DOMAIN_ANDA",
-  projectId: "TEMPEL_PROJECT_ID_ANDA",
-  storageBucket: "TEMPEL_STORAGE_BUCKET_ANDA",
-  messagingSenderId: "TEMPEL_MESSAGING_SENDER_ID_ANDA",
-  appId: "TEMPEL_APP_ID_ANDA"
+  apiKey: "AIzaSyD2JOO_n-0BKNt98mtcC6mMkAv4y0_CfU4",
+  authDomain: "portal-kerja-9f880.firebaseapp.com",
+  projectId: "portal-kerja-9f880",
+  storageBucket: "portal-kerja-9f880.firebasestorage.app",
+  messagingSenderId: "963065292587",
+  appId: "1:963065292587:web:bfe7ee5aeb798cd616876e"
 };
 
 // 3. Menyalakan koneksi ke sistem Login (auth) dan Database (db)
