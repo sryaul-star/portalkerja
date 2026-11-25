@@ -27,9 +27,9 @@ const L1 = [
   "Dokumen Pengujian Barang",
   "Bukti Penerimaan Barang/Goods Receipt",
   "Berita Acara Serah Terima Barang",
-  "Daftar Penerimaan Barang"
+  "Daftar Penerimaan Barang",
+  "Purchase Order"
 ];
-
 const L2 = [
   "Surat Permohonan Pembayaran",
   "Faktur Barang/Invoice",
