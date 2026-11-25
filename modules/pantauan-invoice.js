@@ -671,7 +671,11 @@ function buildChecklist(i) {
   }
 
   return `
-    <h3 class="ct tt">CHECKLIST DOKUMEN</h3>
+    <div class="hr">
+  <div class="ur">URUTAN ${k ? "KONTRAK" : "SPK"}<b>${E(i.no || "-")}</b></div>
+  <h3 class="ct tt">CHECKLIST DOKUMEN</h3>
+  <div class="sp"></div>
+</div>
     <table class="sheet hh il">
       <tr><td>Nomor ${k ? "kontrak" : "SPK"}</td><td>: ${E(i.kontrak)}</td></tr>
       <tr><td>Rekanan</td><td>: ${E(i.vendor)}</td></tr>
