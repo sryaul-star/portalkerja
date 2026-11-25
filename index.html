@@ -169,12 +169,13 @@
       color: var(--text);
     }
     .pi-btn:hover { border-color: var(--accent); }
+    .pi-btn:disabled { opacity: 0.6; cursor: not-allowed; }
     .pi-pr { background: var(--accent); border-color: var(--accent); color: #fff; }
     .pi-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 14px; }
     .pi-st { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
     .pi-st b { display: block; font-size: 24px; color: var(--accent); }
     .pi-st span { font-size: 12px; color: var(--muted); }
-    .pi-input { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); margin-top: 6px; font: inherit; }
+    .pi-input { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); margin-top: 6px; font: inherit; color: var(--text); }
     .pi-ri { display: block; width: 100%; text-align: left; margin-top: 6px; }
     .pi-tg { background: var(--accent-soft); color: var(--accent); border-radius: 6px; padding: 1px 7px; font-size: 12px; }
     .pi-ok { float: right; color: var(--accent); font-size: 12px; font-weight: 600; }
@@ -199,6 +200,21 @@
       max-width: 90%;
       z-index: 999;
     }
+
+    /* Gaya Modul Kelola Akses Tim */
+    .ua-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+    .ua-label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); }
+    .ua-msg { margin-top: 12px; padding: 10px 12px; border-radius: 8px; font-size: 13px; }
+    .ua-ok { background: var(--accent-soft); color: var(--accent); }
+    .ua-err { background: var(--danger-bg); color: var(--danger); }
+    .ua-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .ua-table th, .ua-table td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .ua-table th { color: var(--muted); font-size: 12px; font-weight: 600; background: var(--bg); }
+    .ua-select { padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); font: inherit; }
+    .ua-select:disabled { opacity: 0.65; cursor: not-allowed; }
+    .ua-sm { padding: 5px 10px; font-size: 12px; }
+    .ua-danger { color: var(--danger); }
+    .ua-danger:hover { border-color: var(--danger); background: var(--danger-bg); }
 
     /* Gaya Lembar Cetak Checksheet & Checklist */
     .bar { display: flex; gap: 8px; margin-bottom: 8px; }
@@ -302,6 +318,10 @@
       renderInvoiceModule
     } from "./modules/pantauan-invoice.js";
     import {
+      renderUsersModule,
+      stopUsersSync
+    } from "./modules/kelola-akses.js";
+    import {
       signInWithEmailAndPassword,
       signOut,
       onAuthStateChanged
@@ -360,6 +380,7 @@
 
     document.getElementById("logoutBtn").addEventListener("click", () => {
       stopInvoiceSync();
+      stopUsersSync();
       signOut(auth);
     });
 
@@ -370,6 +391,7 @@
 
       if (!user) {
         stopInvoiceSync();
+        stopUsersSync();
         currentUserProfile = null;
         appView.hidden = true;
         loginView.hidden = false;
@@ -379,7 +401,7 @@
       try {
         const snap = await getDoc(doc(db, "users", user.uid));
         if (!snap.exists()) {
-          showError("Akun Anda belum didaftarkan perannya di database (koleksi users).");
+          showError("Akun Anda tidak memiliki akses atau akses telah dicabut oleh Admin.");
           await signOut(auth);
           return;
         }
@@ -393,7 +415,6 @@
         loginView.hidden = true;
         appView.hidden = false;
 
-        // Mulai sinkronisasi data Modul 1 agar Dashboard langsung menampilkan angka terbaru
         startInvoiceSync(currentUserProfile, () => {
           if (activePage === "dashboard") renderDashboard();
         });
@@ -431,14 +452,18 @@
           <h3>Akses Cepat</h3>
           <div class="pi-btns">
             <button class="pi-btn pi-pr" id="goInvoice">Buka Pantauan Invoice 2027</button>
+            ${currentUserProfile.role === "admin" ? '<button class="pi-btn" id="goUsers">Kelola Akses Tim</button>' : ""}
           </div>
         </div>
       `;
 
       document.getElementById("goInvoice").onclick = () => openPage("invoice");
+      const goUsers = document.getElementById("goUsers");
+      if (goUsers) goUsers.onclick = () => openPage("users");
     }
 
     function openPage(page) {
+      if (activePage === "users" && page !== "users") stopUsersSync();
       activePage = page;
       document.querySelectorAll(".menu button").forEach((b) => {
         b.classList.toggle("active", b.dataset.page === page);
@@ -452,12 +477,7 @@
         renderInvoiceModule(pageContent, currentUserProfile);
       } else if (page === "users") {
         pageTitle.textContent = "Kelola Akses Tim";
-        pageContent.innerHTML = `
-          <div class="card">
-            <h3>Khusus Admin</h3>
-            <p class="muted">Menu ini akan kita aktifkan di Tahap 4 agar Anda bisa menambahkan dan mengatur peran (Editor / Viewer) untuk 10+ rekan kerja.</p>
-          </div>
-        `;
+        renderUsersModule(pageContent, currentUserProfile);
       }
     }
   </script>
