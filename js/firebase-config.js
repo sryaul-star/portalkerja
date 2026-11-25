@@ -3,7 +3,7 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-aut
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 // 1. Ganti teks di dalam tanda kutip dengan judul website pilihan Anda
-export const APP_NAME = "NAMA PORTAL PILIHAN ANDA";
+export const APP_NAME = "Portal Administrasi Logistik";
 
 // 2. Konfigurasi asli proyek Firebase Anda
 const firebaseConfig = {
