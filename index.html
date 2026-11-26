@@ -6,17 +6,21 @@
   <title>Memuat Portal...</title>
   <style>
     :root {
-      --bg: #f4f6f8;
+      --bg: #f3f6f9;
       --card: #ffffff;
       --text: #1b2430;
-      --muted: #677286;
-      --border: #dce1e8;
+      --muted: #64748b;
+      --border: #e2e8f0;
       --accent: #0b6e5f;
       --accent-soft: #e2f2ee;
-      --warn: #a85a06;
-      --warn-bg: #fcefd9;
+      --warn: #b45309;
+      --warn-bg: #fef3c7;
       --danger: #b42318;
-      --danger-bg: #fef3f2;
+      --danger-bg: #fef2f2;
+      --info: #1d4ed8;
+      --info-bg: #eff6ff;
+      --purple: #6d28d9;
+      --purple-bg: #f5f3ff;
     }
     * { box-sizing: border-box; }
     [hidden] { display: none !important; }
@@ -25,6 +29,13 @@
       background: var(--bg);
       color: var(--text);
       font: 14px/1.5 system-ui, "Segoe UI", Arial, sans-serif;
+    }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      background: #f1f5f9;
+      padding: 2px 5px;
+      border-radius: 5px;
     }
 
     /* Layar Login */
@@ -42,6 +53,7 @@
       border: 1px solid var(--border);
       border-radius: 14px;
       padding: 28px 24px;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
     }
     .login-box h1 { margin: 0 0 6px; font-size: 20px; color: var(--accent); }
     .login-box p { margin: 0 0 18px; color: var(--muted); font-size: 13px; }
@@ -79,7 +91,7 @@
     /* Kerangka Utama Portal */
     .layout { display: flex; min-height: 100vh; }
     .sidebar {
-      width: 240px;
+      width: 245px;
       background: var(--card);
       border-right: 1px solid var(--border);
       padding: 18px 14px;
@@ -95,17 +107,19 @@
       padding: 4px 10px 16px;
       border-bottom: 1px solid var(--border);
       margin-bottom: 12px;
+      line-height: 1.3;
     }
     .menu { display: flex; flex-direction: column; gap: 6px; }
     .menu button {
       text-align: left;
       padding: 10px 12px;
       border: 0;
-      border-radius: 8px;
+      border-radius: 9px;
       background: transparent;
       color: var(--text);
       font: inherit;
       cursor: pointer;
+      transition: background 0.15s, color 0.15s;
     }
     .menu button:hover { background: var(--bg); }
     .menu button.active {
@@ -129,7 +143,7 @@
     .topbar {
       background: var(--card);
       border-bottom: 1px solid var(--border);
-      padding: 14px 22px;
+      padding: 14px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -143,17 +157,154 @@
       border-radius: 99px;
       font-size: 12px;
       font-weight: 600;
+      white-space: nowrap;
     }
-    .content { padding: 22px; max-width: 960px; width: 100%; }
+    .content { padding: 22px 24px; max-width: 1360px; width: 100%; }
+    .content.narrow { max-width: 980px; }
     .card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 16px;
       margin-bottom: 14px;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
     }
     .card h3 { margin: 0 0 8px; font-size: 15px; }
     .muted { color: var(--muted); }
+
+    /* Gaya Dashboard Eksekutif */
+    .dash-hero {
+      background: linear-gradient(135deg, #0b6e5f 0%, #0f4c5c 100%);
+      color: #fff;
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 6px 20px rgba(11, 110, 95, 0.16);
+    }
+    .dash-hero h3 { margin: 0 0 4px; font-size: 20px; color: #fff; }
+    .dash-hero p { margin: 0; font-size: 13px; color: rgba(255, 255, 255, 0.88); }
+    .dash-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .dash-pill {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 99px;
+      font-size: 12px;
+    }
+    .hero-btn {
+      background: #fff;
+      color: #0b6e5f;
+      border: 0;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font: inherit;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .hero-btn:hover { background: #f0fdf9; }
+    .hero-btn-ghost {
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+    .hero-btn-ghost:hover { background: rgba(255, 255, 255, 0.24); }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .kpi-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--accent);
+      border-radius: 12px;
+      padding: 14px 16px;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .kpi-card.k-teal { border-top-color: #0b6e5f; }
+    .kpi-card.k-blue { border-top-color: #2563eb; }
+    .kpi-card.k-green { border-top-color: #16a34a; }
+    .kpi-card.k-amber { border-top-color: #ea580c; }
+    .kpi-card.k-purple { border-top-color: #7c3aed; }
+    .kpi-label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.3px; }
+    .kpi-val { font-size: 26px; font-weight: 700; margin: 6px 0 4px; color: var(--text); line-height: 1.15; }
+    .kpi-sub { font-size: 12px; color: var(--muted); }
+    .kpi-bar { height: 6px; background: #e2e8f0; border-radius: 99px; overflow: hidden; margin-top: 8px; }
+    .kpi-bar > span { display: block; height: 100%; background: #0b6e5f; border-radius: 99px; }
+
+    .dash-charts {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .dash-panels {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .chart-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .chart-head h3 { margin: 0 0 2px; font-size: 15px; }
+    .chart-box { position: relative; height: 265px; width: 100%; }
+    .chart-donut-wrap { position: relative; height: 205px; width: 100%; }
+    .inv-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .inv-mini {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 8px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+    .inv-mini b { font-size: 15px; color: var(--accent); }
+
+    .queue-chips {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(115px, 1fr));
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .q-chip {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 8px 10px;
+      cursor: pointer;
+      text-align: left;
+      transition: border-color 0.15s;
+    }
+    .q-chip:hover { border-color: var(--accent); }
+    .q-chip b { display: block; font-size: 18px; color: var(--text); }
+    .q-chip span { font-size: 11px; color: var(--muted); font-weight: 600; }
+
+    .opac-row { margin-bottom: 9px; }
+    .opac-top { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px; }
+    .opac-bar { height: 7px; background: #e2e8f0; border-radius: 99px; overflow: hidden; }
+    .opac-bar > span { display: block; height: 100%; background: #2563eb; border-radius: 99px; }
 
     /* Gaya Modul Pantauan Invoice 2027 */
     .pi-header { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center; margin-bottom: 14px; }
@@ -171,13 +322,13 @@
     .pi-btn:hover { border-color: var(--accent); }
     .pi-btn:disabled { opacity: 0.6; cursor: not-allowed; }
     .pi-pr { background: var(--accent); border-color: var(--accent); color: #fff; }
-    .pi-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 14px; }
+    .pi-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 14px; }
     .pi-st { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
     .pi-st b { display: block; font-size: 24px; color: var(--accent); }
     .pi-st span { font-size: 12px; color: var(--muted); }
-    .pi-input { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); margin-top: 6px; font: inherit; color: var(--text); }
+    .pi-input { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); margin-top: 6px; font: inherit; color: var(--text); }
     .pi-ri { display: block; width: 100%; text-align: left; margin-top: 6px; }
-    .pi-tg { background: var(--accent-soft); color: var(--accent); border-radius: 6px; padding: 1px 7px; font-size: 12px; }
+    .pi-tg { background: var(--accent-soft); color: var(--accent); border-radius: 6px; padding: 2px 7px; font-size: 12px; font-weight: 600; }
     .pi-ok { float: right; color: var(--accent); font-size: 12px; font-weight: 600; }
     .pi-hd { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
     .pi-chip { background: var(--warn-bg); color: var(--warn); border-radius: 99px; padding: 3px 12px; font-size: 12px; align-self: start; }
@@ -200,6 +351,61 @@
       max-width: 90%;
       z-index: 999;
     }
+
+    /* Gaya Modul Pantauan SAP (SuperSri) */
+    .sap-toolbar { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; }
+    .sap-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+    .sap-tab {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 12px;
+      font: inherit;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--text);
+    }
+    .sap-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+    .sap-search { max-width: 380px; margin-top: 0; }
+    .sap-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .sap-pill {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 5px 12px;
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+      color: var(--text);
+    }
+    .sap-pill.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+    .sap-filter-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .sap-table-wrap { overflow-x: auto; }
+    .sap-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    .sap-table th, .sap-table td { text-align: left; padding: 8px 9px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .sap-table th { background: var(--bg); color: var(--muted); font-size: 11.5px; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
+    .sap-table tbody tr:hover { background: #f8fafc; }
+    .sap-note { max-width: 290px; color: var(--muted); font-size: 12px; }
+    .sap-doc {
+      display: inline-block;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 2px 7px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .sap-badge { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .sap-ok { background: #dcfce7; color: #166534; }
+    .sap-warn { background: #ffedd5; color: #c2410c; }
+    .sap-err { background: #fee2e2; color: #b91c1c; }
+    .sap-info { background: var(--info-bg); color: var(--info); }
+    .sap-neu { background: #f1f5f9; color: #475569; }
+    .sap-empty { padding: 24px 12px; text-align: center; color: var(--muted); font-size: 13px; }
+    .sap-pager { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-top: 12px; font-size: 12px; }
+    .sap-page-info { padding: 5px 8px; font-weight: 600; }
 
     /* Gaya Modul Kelola Akses Tim */
     .ua-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
@@ -242,9 +448,15 @@
     .cl tr.sep td { border-top: 2.5px solid #000; }
     .cl .bx { height: 27px; }
 
+    @media (max-width: 1180px) {
+      .kpi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .dash-charts, .dash-panels { grid-template-columns: 1fr; }
+    }
     @media (max-width: 760px) {
       .layout { flex-direction: column; }
       .sidebar { width: 100%; border-right: 0; border-bottom: 1px solid var(--border); }
+      .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .sap-search { max-width: none; }
     }
 
     /* Pengaturan khusus saat Cetak / Simpan PDF agar sidebar & menu ikut sembunyi */
@@ -291,6 +503,7 @@
         <nav class="menu">
           <button class="active" data-page="dashboard">Dashboard Utama</button>
           <button data-page="invoice">Pantauan Invoice 2027</button>
+          <button data-page="sap">Pantauan SAP (SuperSri)</button>
           <button id="menuUsers" data-page="users" hidden>Kelola Akses Tim</button>
         </nav>
       </div>
@@ -306,8 +519,9 @@
     </div>
   </div>
 
-  <!-- Pustaka SheetJS untuk membaca & mengekspor file Excel (.xlsx) -->
+  <!-- Pustaka SheetJS (Excel) & Chart.js (Grafik Interaktif) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 
   <script type="module">
     import { APP_NAME, auth, db } from "./js/firebase-config.js";
@@ -317,6 +531,12 @@
       getInvoiceSummary,
       renderInvoiceModule
     } from "./modules/pantauan-invoice.js";
+    import {
+      startSapSync,
+      stopSapSync,
+      getSapSummary,
+      renderSapModule
+    } from "./modules/pantauan-sap.js";
     import {
       renderUsersModule,
       stopUsersSync
@@ -348,8 +568,21 @@
 
     let currentUserProfile = null;
     let activePage = "dashboard";
+    let sapChartInst = null;
+    let invChartInst = null;
 
-    const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+    const esc = (s) =>
+      String(s ?? "").replace(/[&<>"]/g, (c) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;"
+      }[c]));
+
+    function destroyCharts() {
+      if (sapChartInst) { sapChartInst.destroy(); sapChartInst = null; }
+      if (invChartInst) { invChartInst.destroy(); invChartInst = null; }
+    }
 
     function showError(message) {
       loginError.textContent = message;
@@ -379,7 +612,9 @@
     });
 
     document.getElementById("logoutBtn").addEventListener("click", () => {
+      destroyCharts();
       stopInvoiceSync();
+      stopSapSync();
       stopUsersSync();
       signOut(auth);
     });
@@ -390,7 +625,9 @@
       loginBtn.textContent = "Masuk";
 
       if (!user) {
+        destroyCharts();
         stopInvoiceSync();
+        stopSapSync();
         stopUsersSync();
         currentUserProfile = null;
         appView.hidden = true;
@@ -418,6 +655,9 @@
         startInvoiceSync(currentUserProfile, () => {
           if (activePage === "dashboard") renderDashboard();
         });
+        startSapSync(currentUserProfile, () => {
+          if (activePage === "dashboard") renderDashboard();
+        });
 
         openPage("dashboard");
       } catch (err) {
@@ -431,43 +671,276 @@
     });
 
     function renderDashboard() {
-      const s = getInvoiceSummary();
-      const persen = s.total ? Math.round((s.sudah / s.total) * 100) : 0;
+      destroyCharts();
+      const inv = getInvoiceSummary() || { spk: 0, kontrak: 0, sudah: 0, belum: 0, total: 0 };
+      const sap = getSapSummary();
+      const c = sap?.counts || null;
+      const persen = inv.total ? Math.round((inv.sudah / inv.total) * 100) : 0;
+
+      const sapUpdated = sap?.updatedAt
+        ? new Date(sap.updatedAt).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" })
+        : "Belum diimpor";
+
+      const sapBerhasil = c ? c.totalBerhasilAll : 0;
+      const sapShortageCount = c ? c.logMigoStockKurang : 0;
+      const sapShortageMats = sap?.stockShortages?.length || 0;
+      const sapActiveCount = c ? c.pantauanOrderOpen + c.grPoTotal : 0;
+
+      const shortageRows = (sap?.stockShortages || []).slice(0, 7);
+      const opacRows = sap?.opacBreakdown || [];
+      const maxOpac = opacRows.length ? opacRows[0].count : 1;
 
       pageContent.innerHTML = `
-        <div class="card">
-          <h3>Selamat datang, ${esc(currentUserProfile.nama)}!</h3>
-          <p class="muted" style="margin:4px 0 0">Ringkasan pantauan pekerjaan administrasi tim secara langsung.</p>
-        </div>
-
-        <h3 style="margin:16px 0 10px;font-size:15px">Ringkasan Modul 1: Pantauan Invoice 2027</h3>
-        <div class="pi-stats">
-          <div class="pi-st"><b>${s.spk}</b><span>Total SPK</span></div>
-          <div class="pi-st"><b>${s.kontrak}</b><span>Total Kontrak</span></div>
-          <div class="pi-st"><b>${s.sudah}</b><span>Sudah Ada Invoice (${persen}%)</span></div>
-          <div class="pi-st"><b>${s.belum}</b><span>Belum Ada Invoice</span></div>
-        </div>
-
-        <div class="card">
-          <h3>Akses Cepat</h3>
-          <div class="pi-btns">
-            <button class="pi-btn pi-pr" id="goInvoice">Buka Pantauan Invoice 2027</button>
-            ${currentUserProfile.role === "admin" ? '<button class="pi-btn" id="goUsers">Kelola Akses Tim</button>' : ""}
+        <section class="dash-hero">
+          <div>
+            <h3>Selamat datang, ${esc(currentUserProfile.nama)}!</h3>
+            <p>Ringkasan terpadu operasional SAP (SuperSri) dan Pantauan Invoice 2027 secara langsung.</p>
+            <div class="dash-meta">
+              <span class="dash-pill">Update SuperSri: ${esc(sapUpdated)}</span>
+              <span class="dash-pill">Invoice Terpantau: ${inv.total} Dokumen</span>
+            </div>
           </div>
-        </div>
+          <div class="pi-btns">
+            <button class="hero-btn" id="goSap">Pantauan SAP</button>
+            <button class="hero-btn hero-btn-ghost" id="goInvoice">Pantauan Invoice</button>
+            ${currentUserProfile.role === "admin" ? '<button class="hero-btn hero-btn-ghost" id="goUsers">Kelola Tim</button>' : ""}
+          </div>
+        </section>
+
+        <section class="kpi-grid">
+          <div class="kpi-card k-teal">
+            <span class="kpi-label">Dokumen Pengadaan</span>
+            <div class="kpi-val">${inv.total.toLocaleString("id-ID")}</div>
+            <span class="kpi-sub">${inv.spk} SPK • ${inv.kontrak} Kontrak</span>
+          </div>
+
+          <div class="kpi-card k-blue">
+            <span class="kpi-label">Progres Invoice</span>
+            <div class="kpi-val">${persen}%</div>
+            <span class="kpi-sub">${inv.sudah} sudah • ${inv.belum} belum</span>
+            <div class="kpi-bar"><span style="width:${persen}%"></span></div>
+          </div>
+
+          <div class="kpi-card k-green">
+            <span class="kpi-label">SAP Posting Berhasil</span>
+            <div class="kpi-val">${c ? sapBerhasil.toLocaleString("id-ID") : "-"}</div>
+            <span class="kpi-sub">${c ? "Log MIGO, GR Order & PO STO" : "Menunggu impor SuperSri"}</span>
+          </div>
+
+          <div class="kpi-card k-amber">
+            <span class="kpi-label">Sorotan Stock Kurang</span>
+            <div class="kpi-val" style="color:${sapShortageCount ? "#c2410c" : "inherit"}">${c ? sapShortageCount.toLocaleString("id-ID") : "-"}</div>
+            <span class="kpi-sub">${c ? `${sapShortageMats} kode material terdampak` : "Menunggu impor SuperSri"}</span>
+          </div>
+
+          <div class="kpi-card k-purple">
+            <span class="kpi-label">Order OPEN & GR PO</span>
+            <div class="kpi-val">${c ? sapActiveCount.toLocaleString("id-ID") : "-"}</div>
+            <span class="kpi-sub">${c ? `${c.pantauanOrderOpen} Order (${c.uniqueNoKai} NO KAI) • ${c.grPoTotal} GR PO` : "Menunggu impor SuperSri"}</span>
+          </div>
+        </section>
+
+        <section class="dash-charts">
+          <div class="card" style="margin-bottom:0">
+            <div class="chart-head">
+              <div>
+                <h3>Aktivitas Transaksi SAP (SuperSri)</h3>
+                <small class="muted">${
+                  sap
+                    ? `Tren ${sap.trendMode === "monthly" ? "bulanan" : "harian"} status Berhasil, Stock Kurang, dan Gagal`
+                    : "Impor file SuperSri.xlsm di menu Pantauan SAP untuk menampilkan grafik"
+                }</small>
+              </div>
+              <button class="pi-btn ua-sm" id="btnViewMigo">Lihat Log</button>
+            </div>
+            ${
+              sap && sap.trend && sap.trend.length
+                ? '<div class="chart-box"><canvas id="sapTrendChart"></canvas></div>'
+                : `<div class="sap-empty" style="padding:70px 16px">Belum ada data grafik SuperSri.<br><br><button class="pi-btn pi-pr ua-sm" id="btnGoUploadSap">Buka Menu Pantauan SAP</button></div>`
+            }
+          </div>
+
+          <div class="card" style="margin-bottom:0">
+            <div class="chart-head">
+              <div>
+                <h3>Progres Pantauan Invoice 2027</h3>
+                <small class="muted">Perbandingan dokumen yang sudah & belum masuk invoice</small>
+              </div>
+              <button class="pi-btn ua-sm" id="btnViewInv">Detail</button>
+            </div>
+            <div class="chart-donut-wrap"><canvas id="invDonutChart"></canvas></div>
+            <div class="inv-split">
+              <div class="inv-mini"><span>Total SPK</span><b>${inv.spk}</b></div>
+              <div class="inv-mini"><span>Total Kontrak</span><b>${inv.kontrak}</b></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="dash-panels">
+          <div class="card" style="margin-bottom:0">
+            <div class="chart-head">
+              <div>
+                <h3>Sorotan Material Stock Kurang</h3>
+                <small class="muted">Rekap kode material defisit dari Log MIGO (perlu perhatian stok)</small>
+              </div>
+              ${c ? `<span class="sap-badge sap-warn">${sapShortageMats} Material</span>` : ""}
+            </div>
+            ${
+              shortageRows.length
+                ? `<div class="sap-table-wrap">
+                     <table class="sap-table">
+                       <thead><tr><th>Material</th><th class="c">Kejadian</th><th>Order Terakhir</th><th>Catatan SAP</th></tr></thead>
+                       <tbody>
+                         ${shortageRows
+                           .map(
+                             (m) => `<tr>
+                               <td><code>${esc(m.material)}</code></td>
+                               <td class="c"><span class="sap-badge sap-warn">${m.count}x</span></td>
+                               <td><b>${esc(m.lastOrder || "-")}</b><br><small class="muted">${esc(m.lastTime || "")}</small></td>
+                               <td class="sap-note">${esc((m.lastNote || "-").slice(0, 90))}</td>
+                             </tr>`
+                           )
+                           .join("")}
+                       </tbody>
+                     </table>
+                   </div>`
+                : `<div class="sap-empty">${c ? "Tidak ada kejadian Stock Kurang tercatat di Log MIGO." : "Belum ada data SuperSri."}</div>`
+            }
+          </div>
+
+          <div class="card" style="margin-bottom:0">
+            <div class="chart-head">
+              <div>
+                <h3>Antrean Aktif & Sebaran Pantauan Order</h3>
+                <small class="muted">Status meja kerja SuperSri dan komposisi Order OPEN per tahap</small>
+              </div>
+              <button class="pi-btn ua-sm" id="btnViewOrders">Pantauan Order</button>
+            </div>
+            ${
+              c
+                ? `<div class="queue-chips">
+                     <button class="q-chip" data-open-sap="antrean"><b>${c.grPoTotal}</b><span>GR PO Aktif</span></button>
+                     <button class="q-chip" data-open-sap="antrean"><b>${c.inputTotal}</b><span>Antrean GI</span></button>
+                     <button class="q-chip" data-open-sap="antrean"><b>${c.grOrderTotal}</b><span>GR Order</span></button>
+                     <button class="q-chip" data-open-sap="antrean"><b>${c.poStoMintaTotal + c.poStoBeriTotal}</b><span>PO STO Aktif</span></button>
+                   </div>
+                   <div style="margin-top:8px">
+                     <b style="display:block;font-size:12px;margin-bottom:8px;color:var(--muted)">SEBARAN ORDER OPEN PER TAHAP (OPAC)</b>
+                     ${
+                       opacRows.length
+                         ? opacRows
+                             .map(
+                               (o) => `<div class="opac-row">
+                                 <div class="opac-top">
+                                   <span>${esc(o.label)}</span>
+                                   <b>${o.count}</b>
+                                 </div>
+                                 <div class="opac-bar"><span style="width:${Math.max(4, Math.round((o.count / maxOpac) * 100))}%"></span></div>
+                               </div>`
+                             )
+                             .join("")
+                         : '<p class="muted" style="font-size:12px;margin:0">Tidak ada Order berstatus OPEN.</p>'
+                     }
+                   </div>`
+                : '<div class="sap-empty">Belum ada data SuperSri.</div>'
+            }
+          </div>
+        </section>
       `;
 
+      document.getElementById("goSap").onclick = () => openPage("sap");
       document.getElementById("goInvoice").onclick = () => openPage("invoice");
+      document.getElementById("btnViewMigo").onclick = () => openPage("sap", "migo");
+      document.getElementById("btnViewInv").onclick = () => openPage("invoice");
+      document.getElementById("btnViewOrders").onclick = () => openPage("sap", "orders");
+      const btnUp = document.getElementById("btnGoUploadSap");
+      if (btnUp) btnUp.onclick = () => openPage("sap");
       const goUsers = document.getElementById("goUsers");
       if (goUsers) goUsers.onclick = () => openPage("users");
+      pageContent.querySelectorAll("[data-open-sap]").forEach((el) => {
+        el.onclick = () => openPage("sap", el.dataset.openSap);
+      });
+
+      // Render Grafik Chart.js
+      if (window.Chart) {
+        const sapCanvas = document.getElementById("sapTrendChart");
+        if (sapCanvas && sap?.trend?.length) {
+          sapChartInst = new Chart(sapCanvas, {
+            type: "bar",
+            data: {
+              labels: sap.trend.map((t) => t.label),
+              datasets: [
+                {
+                  label: "Berhasil",
+                  data: sap.trend.map((t) => t.berhasil),
+                  backgroundColor: "#0b6e5f",
+                  borderRadius: 4
+                },
+                {
+                  label: "Stock Kurang",
+                  data: sap.trend.map((t) => t.stockKurang),
+                  backgroundColor: "#f59e0b",
+                  borderRadius: 4
+                },
+                {
+                  label: "Gagal",
+                  data: sap.trend.map((t) => t.gagal),
+                  backgroundColor: "#ef4444",
+                  borderRadius: 4
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { position: "bottom", labels: { boxWidth: 12, font: { size: 12 } } }
+              },
+              scales: {
+                x: { stacked: true, grid: { display: false } },
+                y: { stacked: true, beginAtZero: true }
+              }
+            }
+          });
+        }
+
+        const invCanvas = document.getElementById("invDonutChart");
+        if (invCanvas) {
+          invChartInst = new Chart(invCanvas, {
+            type: "doughnut",
+            data: {
+              labels: ["Sudah Ada Invoice", "Belum Ada Invoice"],
+              datasets: [
+                {
+                  data: inv.total ? [inv.sudah, inv.belum] : [0, 1],
+                  backgroundColor: inv.total ? ["#0b6e5f", "#cbd5e1"] : ["#e2e8f0", "#e2e8f0"],
+                  borderWidth: 0
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              cutout: "66%",
+              plugins: {
+                legend: { position: "bottom", labels: { boxWidth: 12, font: { size: 12 } } }
+              }
+            }
+          });
+        }
+      }
     }
 
-    function openPage(page) {
+    function openPage(page, subTab = null) {
+      if (activePage === "dashboard" && page !== "dashboard") destroyCharts();
       if (activePage === "users" && page !== "users") stopUsersSync();
       activePage = page;
+
       document.querySelectorAll(".menu button").forEach((b) => {
         b.classList.toggle("active", b.dataset.page === page);
       });
+
+      pageContent.classList.toggle("narrow", page === "invoice" || page === "users");
 
       if (page === "dashboard") {
         pageTitle.textContent = "Dashboard Utama";
@@ -475,6 +948,9 @@
       } else if (page === "invoice") {
         pageTitle.textContent = "Pantauan Invoice 2027";
         renderInvoiceModule(pageContent, currentUserProfile);
+      } else if (page === "sap") {
+        pageTitle.textContent = "Pantauan SAP (SuperSri)";
+        renderSapModule(pageContent, currentUserProfile, subTab);
       } else if (page === "users") {
         pageTitle.textContent = "Kelola Akses Tim";
         renderUsersModule(pageContent, currentUserProfile);
